@@ -1,6 +1,9 @@
 # Encrypted SSL/TLS C++ Reverse Shell (HTTPS)
 <b><span style="color:green;">✅ Status: Undetected </span></b>
+
 https://www.virustotal.com/gui/file/22dab3683f6299d6fe291df43ac6bf7b8f7a7c5f564985c55f57cb20d5ea6f0b?nocache=1
+
+<img width="1665" height="411" alt="image" src="https://github.com/user-attachments/assets/3ccce83e-0c76-4364-9c01-28d25ada2038" />
 
 ## Overview
 When it comes to SSL/TLS reverse shells, the publicly available options are often limited to:
