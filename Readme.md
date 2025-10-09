@@ -3,7 +3,7 @@
 
 https://www.virustotal.com/gui/file/22dab3683f6299d6fe291df43ac6bf7b8f7a7c5f564985c55f57cb20d5ea6f0b?nocache=1
 
-<img width="1665" height="411" alt="image" src="https://github.com/user-attachments/assets/3ccce83e-0c76-4364-9c01-28d25ada2038" />
+<img width="1816" height="325" alt="image" src="https://github.com/user-attachments/assets/4fc4e331-1e35-4324-8e9f-f0097944df92" />
 
 ## Overview
 When it comes to SSL/TLS reverse shells, the publicly available options are often limited to:
