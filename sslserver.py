@@ -106,10 +106,10 @@ def start_server():
                     # Handle the client connection in a separate function
                     handle_client(conn)
 
-            except ssl.SSLError as ssl_error:
-                print("[-] Failed to connect due to SSL error with self-signed cert:", ssl_error)
-            except Exception as e:
-                print(f"[-] An error occurred: {e}")
+                except ssl.SSLError as ssl_error:
+                    print("[-] Failed to connect due to SSL error with self-signed cert:", ssl_error)
+                except Exception as e:
+                    print(f"[-] An error occurred: {e}")
 
 def handle_client(conn):
     """Handle the client connection."""
