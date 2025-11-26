@@ -89,8 +89,6 @@ def receive_full_response(conn):
 
     return headers.decode('utf-8', errors='ignore') + "\r\n\r\n" + body.decode('utf-8', errors='ignore')
 
-python
-
 def start_server():
     """Start an SSL/TLS server and handle client connections."""
     context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
