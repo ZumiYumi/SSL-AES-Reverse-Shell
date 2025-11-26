@@ -120,6 +120,7 @@ pip3 install pycryptodome
 └─$ python3 sslserverv1.3.py      
 [*] Listening on 0.0.0.0:443
 ```
+3. Prepare transfer of the payload, one way could be zipping the three needed x64 DLL's that are present in the SSLReverseShell Folder. A tip to increase likelyhood of successful running is to mark these dll's as hidden before zipping. Then the victim must unzip and run the compiled exe. Otherwise if you are delivering you need to ensure that the dlls and exe are transferred before attempting to run. (Tested on Windows 10)
 ---
 
 ### Disclaimer
