@@ -89,6 +89,8 @@ def receive_full_response(conn):
 
     return headers.decode('utf-8', errors='ignore') + "\r\n\r\n" + body.decode('utf-8', errors='ignore')
 
+python
+
 def start_server():
     """Start an SSL/TLS server and handle client connections."""
     context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
@@ -98,7 +100,10 @@ def start_server():
         sock.bind((host, port))  # Bind to the specified host and port
         sock.listen(5)  # Start listening for connections
 
-        with context.wrap_socket(sock, server_side=True) as ssock:
+        while True:
+            try:
+                # Wrap the socket and accept connections
+                with context.wrap_socket(sock, server_side=True) as ssock:
                     print(f"[*] Listening on {host}:{port}")
                     conn, addr = ssock.accept()  # Accept a new connection
                     print(f"[+] Connection from {addr}")
@@ -106,10 +111,10 @@ def start_server():
                     # Handle the client connection in a separate function
                     handle_client(conn)
 
-                except ssl.SSLError as ssl_error:
-                    print("[-] Failed to connect due to SSL error with self-signed cert:", ssl_error)
-                except Exception as e:
-                    print(f"[-] An error occurred: {e}")
+            except ssl.SSLError as ssl_error:
+                print("[-] Failed to connect due to SSL error with self-signed cert:", ssl_error)
+            except Exception as e:
+                print(f"[-] An error occurred: {e}")
 
 def handle_client(conn):
     """Handle the client connection."""
